@@ -46,6 +46,9 @@ public class MainActivity extends Activity {
     private ProgressBar spinner;
     private ArrayList<String> l;
     private ArrayList<String> b;
+//    private ArrayList<String> dateList;
+//    private ArrayList<String> fromList;
+
     static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1001;
     static final int REQUEST_CODE_RECOVER_FROM_PLAY_SERVICES_ERROR = 1002;
@@ -67,6 +70,8 @@ public class MainActivity extends Activity {
         MySQLiteHelper db = new MySQLiteHelper(this);
         l = new ArrayList<String>();
         b = new ArrayList<String>();
+//        final ArrayList<String> dateList = new ArrayList<String>();
+//        final ArrayList<String> fromList = new ArrayList<String>();
         List<Email> list = db.getAllBooks();
         for(Email e : list){
             l.add(e.getSubject());
@@ -88,6 +93,8 @@ public class MainActivity extends Activity {
                 Intent i = new Intent(getApplicationContext(), InfoActivity.class);
                 i.putExtra("body",b.get(position));
                 i.putExtra("subject", l.get(position));
+//                i.putExtra("date", dateList.get(position));
+//                i.putExtra("from", fromList.get(position));
                 startActivity(i);
             }
         });
@@ -239,6 +246,9 @@ public class MainActivity extends Activity {
                         Intent i = new Intent(getApplicationContext(), InfoActivity.class);
                         i.putExtra("body",b.get(position));
                         i.putExtra("subject", s.get(position));
+//                        i.putExtra("date", dateList.get(position));
+//                        i.putExtra("from", fromList.get(position));
+                        // shreeya - PUT DATE, FROM TO , ETC HERE!!!!!!!!!
                         startActivity(i);
                     }
                 });

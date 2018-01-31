@@ -115,6 +115,8 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
         ArrayList<String> body = new ArrayList<String>();
 
         ArrayList<String> l = new ArrayList<String>();
+
+
         StringBuilder builder = new StringBuilder();
         String body2 = "";
         String sub = "";
@@ -173,12 +175,27 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
                     subs.add(h.getValue());
                     mActivity.list(l);
                     break;
-                }else if(h.getName().equals("Date")){
+                }else if(h.getName().equals("date")){
                     emailDate = getDate(h.getValue());
-                }else if(h.getName().equals("From")){
+                }else if(h.getName().equals("from")){
                     author = h.getValue();
                 }
             }
+
+//            for( MessagePartHeader h : messageHeader) {
+//                if(h.getName().equals("Subject")){
+//                    sub = h.getValue();
+//                    l.add(h.getValue());
+//                    subs.add(h.getValue());
+//                    mActivity.list(l);
+//                    break;
+//                }else if(h.getName().equals("Date")){
+//                    emailDate = getDate(h.getValue());
+//                }else if(h.getName().equals("From")){
+//                    author = h.getValue();
+//                }
+//            }
+
             db.addBook(new Email(sub,bod,author,emailDate[0],emailDate[1],emailDate[2],1));
 
         }

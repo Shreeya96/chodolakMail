@@ -1,6 +1,7 @@
 package com.example.chodolakmail;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -15,6 +16,8 @@ public class InfoActivity extends Activity {
 
     TextView header;
     TextView body;
+//    TextView Date;
+//    TextView From;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +25,25 @@ public class InfoActivity extends Activity {
         setContentView(R.layout.activity_info);
         header = (TextView)findViewById(R.id.header);
         body = (TextView)findViewById(R.id.body);
+//        Date = (TextView) findViewById(R.id.Date);
+//        From = (TextView) findViewById(R.id.From);
+
         body.setMovementMethod(new ScrollingMovementMethod());
         String s = "";
         String b = "";
+//        String date = "";
+//        String from = "";
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
              b = extras.getString("body");
              s = extras.getString("subject");
+//             date = extras.getString("date");
+//             from = extras.getString("from");
         }
 
         body.setText(b);
         header.setText(s);
+//        Date.setText(date);
+//        From.setText(from);
     }
 }
