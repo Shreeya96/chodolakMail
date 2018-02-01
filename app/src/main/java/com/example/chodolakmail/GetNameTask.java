@@ -104,7 +104,6 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
         HttpTransport httpTransport = new NetHttpTransport();
 
         Gmail service = new Gmail.Builder(httpTransport, jsonFactory, credential).setApplicationName("GmailApiTP").build();
-        String author = "";
         ListThreadsResponse threadsResponse;
         Profile p;
         Thread response;
@@ -113,14 +112,20 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
         BigInteger i;
         ArrayList<String> subs = new ArrayList<String>();
         ArrayList<String> body = new ArrayList<String>();
+        ArrayList<String> fromList=new ArrayList<String>();
+        //declared arraylist here
+
 
         ArrayList<String> l = new ArrayList<String>();
 
 
         StringBuilder builder = new StringBuilder();
         String body2 = "";
-        String sub = "";
+        String sub = ""; //strings initialized to null to be filled later
         String bod = "";
+        String author = "";
+
+
         int emailDate[] = {0,0,0};
         //Note for later.
         //p = service.users().getProfile("me").execute();
@@ -133,7 +138,7 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+//get email code
         for(Thread thread : t) {
             String id = thread.getId();
             response = service.users().threads().get("me",id).execute();
@@ -171,16 +176,29 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
             for( MessagePartHeader h : messageHeader) {
                 if(h.getName().equals("Subject")){
                     sub = h.getValue();
-                    l.add(h.getValue());
+                    l.add(sub);
                     subs.add(h.getValue());
+
                     mActivity.list(l);
                     break;
                 }else if(h.getName().equals("date")){
-                    emailDate = getDate(h.getValue());
-                }else if(h.getName().equals("from")){
+                    emailDate = getDate(h.getValue());}
+                else if(h.getName().equals("From")){
                     author = h.getValue();
+//                    System.out.println(author);
+                    fromList.add(author);
                 }
             }
+
+//           for (MessagePartHeader f:messageHeader)
+//           {
+//               if (f.getName().equals("from"))
+//               {
+//                   author=f.getValue();
+//                   System.out.println(author);
+//                   fromList.add(author);
+//               }
+//           }
 
 //            for( MessagePartHeader h : messageHeader) {
 //                if(h.getName().equals("Subject")){
@@ -200,9 +218,8 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
 
         }
 
-
         mActivity.list(l);
-        mActivity.setItemListener(body, subs);
+        mActivity.setItemListener(body, subs,fromList); // date, from
         mActivity.hideSpinner();
 
     }

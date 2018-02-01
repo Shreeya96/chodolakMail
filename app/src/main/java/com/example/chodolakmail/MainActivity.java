@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
     private ArrayList<String> l;
     private ArrayList<String> b;
 //    private ArrayList<String> dateList;
-//    private ArrayList<String> fromList;
+    private ArrayList<String> fList;
 
     static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     static final int REQUEST_CODE_RECOVER_FROM_AUTH_ERROR = 1001;
@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
         String email = loadSavedPreferences();
         if(!email.equals("EmailStuff")){
             mEmail = loadSavedPreferences();
-            Log.d("Email2", mEmail);
+//            Log.d("Email2", mEmail);
         }
 
 
@@ -71,11 +71,13 @@ public class MainActivity extends Activity {
         l = new ArrayList<String>();
         b = new ArrayList<String>();
 //        final ArrayList<String> dateList = new ArrayList<String>();
-//        final ArrayList<String> fromList = new ArrayList<String>();
+        fList = new ArrayList<String>();
         List<Email> list = db.getAllBooks();
         for(Email e : list){
             l.add(e.getSubject());
             b.add(e.getBody());
+            fList.add(e.getAuthor());
+//          fromList.add(e.getAuthor());
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, l );
 
@@ -93,8 +95,7 @@ public class MainActivity extends Activity {
                 Intent i = new Intent(getApplicationContext(), InfoActivity.class);
                 i.putExtra("body",b.get(position));
                 i.putExtra("subject", l.get(position));
-//                i.putExtra("date", dateList.get(position));
-//                i.putExtra("from", fromList.get(position));
+                i.putExtra("from", fList.get(position));
                 startActivity(i);
             }
         });
@@ -106,7 +107,7 @@ public class MainActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 mEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 savePreferences("email", mEmail);
-                Log.d("Email1", "Putting " + mEmail + " into prefs");
+//                Log.d("Email1", "Putting " + mEmail + " into prefs");
                 getUsername();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "You must pick an account", Toast.LENGTH_SHORT).show();
@@ -156,11 +157,10 @@ public class MainActivity extends Activity {
         return name;
     }
 
-
-
     /** Attempt to get the user name. If the email address isn't known yet,
      * then call pickUserAccount() method so the user can pick an account.
      */
+
     private void getUsername() {
         if (mEmail == null) {
             pickUserAccount();
@@ -235,7 +235,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void setItemListener(final ArrayList<String> b, final ArrayList<String> s){
+    public void setItemListener(final ArrayList<String> b, final ArrayList<String> s, /*, final ArrayList<String> fromList*/ArrayList<String> author){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -246,8 +246,7 @@ public class MainActivity extends Activity {
                         Intent i = new Intent(getApplicationContext(), InfoActivity.class);
                         i.putExtra("body",b.get(position));
                         i.putExtra("subject", s.get(position));
-//                        i.putExtra("date", dateList.get(position));
-//                        i.putExtra("from", fromList.get(position));
+                      i.putExtra("from", fList.get(position));
                         // shreeya - PUT DATE, FROM TO , ETC HERE!!!!!!!!!
                         startActivity(i);
                     }
@@ -260,6 +259,7 @@ public class MainActivity extends Activity {
      * This method is a hook for background threads and async tasks that need to provide the
      * user a response UI when an exception occurs.
      */
+
     public void handleException(final Exception e) {
         runOnUiThread(new Runnable() {
             @Override

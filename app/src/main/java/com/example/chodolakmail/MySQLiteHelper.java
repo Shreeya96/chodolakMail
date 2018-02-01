@@ -62,7 +62,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String[] COLUMNS = {KEY_ID,KEY_SUBJECT,KEY_BODY,KEY_AUTHOR,KEY_DAY,KEY_MONTH,KEY_YEAR,KEY_URGENCY};
 
     public void addBook(Email email){
-        Log.d("addBook", email.toString());
+//        Log.d("addBook", email.toString());
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -117,7 +117,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         email.setYear(cursor.getInt(6));
         email.setUrgency(cursor.getInt(7));
 
-        Log.d("getBook("+id+")", email.toString());
+//        Log.d("getBook("+id+")", email.toString());
 
         // 5. return book
         return email;
@@ -142,6 +142,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 email.setSubject(cursor.getString(1));
                 email.setBody(cursor.getString(2));
                 email.setAuthor(cursor.getString(3));
+                System.out.println(cursor.getString(3));
                 email.setDay(cursor.getInt(4));
                 email.setMonth(cursor.getInt(5));
                 email.setYear(cursor.getInt(6));
@@ -152,7 +153,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        Log.d("getAllBooks()", emails.toString());
+//        Log.d("getAllBooks()", emails.toString());
 
         // return books
         return emails;
