@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
     private ProgressBar spinner;
     private ArrayList<String> l;
     private ArrayList<String> b;
-//    private ArrayList<String> dateList;
+    private ArrayList<String> dateList;
     private ArrayList<String> fList;
 
     static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
@@ -66,18 +66,18 @@ public class MainActivity extends Activity {
 //            Log.d("Email2", mEmail);
         }
 
-
         MySQLiteHelper db = new MySQLiteHelper(this);
         l = new ArrayList<String>();
         b = new ArrayList<String>();
-//        final ArrayList<String> dateList = new ArrayList<String>();
+        final ArrayList<String> dateList = new ArrayList<String>();
         fList = new ArrayList<String>();
         List<Email> list = db.getAllBooks();
+
         for(Email e : list){
             l.add(e.getSubject());
             b.add(e.getBody());
             fList.add(e.getAuthor());
-//          fromList.add(e.getAuthor());
+          dateList.add(e.getDateTime());
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, l );
 
@@ -96,6 +96,7 @@ public class MainActivity extends Activity {
                 i.putExtra("body",b.get(position));
                 i.putExtra("subject", l.get(position));
                 i.putExtra("from", fList.get(position));
+                i.putExtra("date",dateList.get(position));
                 startActivity(i);
             }
         });
@@ -235,7 +236,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    public void setItemListener(final ArrayList<String> b, final ArrayList<String> s, /*, final ArrayList<String> fromList*/ArrayList<String> author){
+    public void setItemListener(final ArrayList<String> b, final ArrayList<String> s, /*, final ArrayList<String> fromList*/ArrayList<String> author, ArrayList<String> dateTimeList){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -247,6 +248,7 @@ public class MainActivity extends Activity {
                         i.putExtra("body",b.get(position));
                         i.putExtra("subject", s.get(position));
                       i.putExtra("from", fList.get(position));
+                      i.putExtra("date",dateList.get(position));
                         // shreeya - PUT DATE, FROM TO , ETC HERE!!!!!!!!!
                         startActivity(i);
                     }

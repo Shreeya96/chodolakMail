@@ -28,9 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "subject TEXT, "+
                 "body TEXT, " +
                 "author TEXT, " +
-                "day INT, " +
-                "month INT, " +
-                "year INT, " +
+                "dateTime TEXT, " +
                 "urgency INT)";
 
         // create books table
@@ -54,12 +52,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_SUBJECT = "subject";
     private static final String KEY_BODY = "body";
     private static final String KEY_AUTHOR = "author";
-    private static final String KEY_DAY = "day";
-    private static final String KEY_MONTH = "month";
-    private static final String KEY_YEAR = "year";
+//    private static final String KEY_DAY = "day";
+//    private static final String KEY_MONTH = "month";
+//    private static final String KEY_YEAR = "year";
+    private static final String KEY_DATETIME="dateTime";
     private static final String KEY_URGENCY = "urgency";
 
-    private static final String[] COLUMNS = {KEY_ID,KEY_SUBJECT,KEY_BODY,KEY_AUTHOR,KEY_DAY,KEY_MONTH,KEY_YEAR,KEY_URGENCY};
+    private static final String[] COLUMNS = {KEY_ID,KEY_SUBJECT,KEY_BODY,KEY_AUTHOR,KEY_DATETIME,KEY_URGENCY};
 
     public void addBook(Email email){
 //        Log.d("addBook", email.toString());
@@ -71,9 +70,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(KEY_SUBJECT, email.getSubject());
         values.put(KEY_BODY, email.getBody());
         values.put(KEY_AUTHOR, email.getAuthor());
-        values.put(KEY_DAY, email.getDay());
-        values.put(KEY_MONTH, email.getMonth());
-        values.put(KEY_YEAR, email.getYear());
+        values.put(KEY_DATETIME,email.getDateTime());
+//        values.put(KEY_DAY, email.getDay());
+//        values.put(KEY_MONTH, email.getMonth());
+//        values.put(KEY_YEAR, email.getYear());
         values.put(KEY_URGENCY, email.getUrgency());
 
 
@@ -112,10 +112,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         email.setSubject(cursor.getString(1));
         email.setBody(cursor.getString(2));
         email.setAuthor(cursor.getString(3));
-        email.setDay(cursor.getInt(4));
-        email.setMonth(cursor.getInt(5));
-        email.setYear(cursor.getInt(6));
-        email.setUrgency(cursor.getInt(7));
+        email.setDateTime(cursor.getString(4));
+        System.out.println("datetime inside table"+cursor.getString(4));
+
+//        email.setDay(cursor.getInt(4));
+//        email.setMonth(cursor.getInt(5));
+//        email.setYear(cursor.getInt(6));
+        email.setUrgency(cursor.getInt(5));
 
 //        Log.d("getBook("+id+")", email.toString());
 
@@ -142,14 +145,16 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 email.setSubject(cursor.getString(1));
                 email.setBody(cursor.getString(2));
                 email.setAuthor(cursor.getString(3));
-                System.out.println(cursor.getString(3));
-                email.setDay(cursor.getInt(4));
-                email.setMonth(cursor.getInt(5));
-                email.setYear(cursor.getInt(6));
-                email.setUrgency(cursor.getInt(7));
+                email.setDateTime(cursor.getString(4));
+//                email.setDay(cursor.getInt(4));
+//                email.setMonth(cursor.getInt(5));
+//                email.setYear(cursor.getInt(6));
+                email.setUrgency(cursor.getInt(5));
 
                 // Add book to books
                 emails.add(email);
+
+
             } while (cursor.moveToNext());
         }
 

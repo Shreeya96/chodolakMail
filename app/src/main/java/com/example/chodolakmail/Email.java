@@ -5,21 +5,23 @@ public class Email {
     private String subject;
     private String body;
     private String author;
-    private int day;
-    private int month;
-    private int year;
+//    private int day;
+//    private int month;
+//    private int year;
+    private String dateTime;
     private int urgency;
 
     public Email(){}
 
-    public Email(String subject, String body, String author, int day, int month, int year, int urgency){
+    public Email(String subject, String body, String author,String dateTime, int urgency){
         super();
         this.subject = subject;
         this.body = body;
         this.author = author;
-        this.day = day;
-        this.month = month;
-        this.year = year;
+//        this.day = day;
+//        this.month = month;
+//        this.year = year;
+        this.dateTime=dateTime;
         this.urgency = urgency;
     }
     public long getId() {
@@ -54,28 +56,38 @@ public class Email {
         this.author = author;
     }
 
-    public long getDay() {
-        return day;
+//    public long getDay() {
+//        return day;
+//    }
+//
+//    public void setDay(int day) {
+//        this.day = day;
+//    }
+//
+//    public long getMonth() {
+//        return month;
+//    }
+//
+//    public void setMonth(int month) {
+//        this.month = month;
+//    }
+//
+//    public long getYear() {
+//        return year;
+//    }
+//
+//    public void setYear(int year) {
+//        this.year = year;
+//    }
+
+    public String getDateTime()
+    {
+        return dateTime;
     }
 
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public long getMonth() {
-        return month;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public long getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+    public void setDateTime(String dateTime)
+    {
+        this.dateTime=dateTime;
     }
 
     public long getUrgency() {

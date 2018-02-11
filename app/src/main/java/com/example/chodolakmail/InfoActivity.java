@@ -16,7 +16,7 @@ public class InfoActivity extends Activity {
 
     TextView header;
     TextView body;
-//    TextView Date;
+    TextView Date;
   TextView From;
 
     @Override
@@ -25,25 +25,25 @@ public class InfoActivity extends Activity {
         setContentView(R.layout.activity_info);
         header = (TextView)findViewById(R.id.header);
         body = (TextView)findViewById(R.id.body);
-//        Date = (TextView) findViewById(R.id.Date);
+        Date = (TextView) findViewById(R.id.dateid);
     From = (TextView) findViewById(R.id.authorid);
 
         body.setMovementMethod(new ScrollingMovementMethod());
         String s = "";
         String b = "";
-//        String date = "";
+        String date = "";
         String from = "";
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
              b = extras.getString("body");
              s = extras.getString("subject");
-//           date = extras.getString("date");
+           date = extras.getString("date");
            from = extras.getString("from");
         }
 
         body.setText(b);
         header.setText(s);
-//        Date.setText(date);
+        Date.setText(date);
         From.setText(from);
     }
 }

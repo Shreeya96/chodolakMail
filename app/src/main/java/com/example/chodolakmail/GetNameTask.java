@@ -1,6 +1,6 @@
 package com.example.chodolakmail;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.icu.util.IndianCalendar;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,6 +13,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
+import com.google.api.client.util.DateTime;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListThreadsResponse;
 import com.google.api.services.gmail.model.Message;
@@ -23,14 +24,17 @@ import com.google.api.services.gmail.model.Thread;
 import org.json.JSONException;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.text.ParseException;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 public class GetNameTask extends AsyncTask<Void, Void, Void> {
     private static final String TAG = "TokenInfoTask";
@@ -39,6 +43,7 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
 
     protected String mScope;
     protected String mEmail;
+    public String dateTime;
 
     GetNameTask(MainActivity activity, String email, String scope) {
         this.mActivity = activity;
@@ -113,6 +118,7 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
         ArrayList<String> subs = new ArrayList<String>();
         ArrayList<String> body = new ArrayList<String>();
         ArrayList<String> fromList=new ArrayList<String>();
+        ArrayList<String> dateTimeList=new ArrayList<>();
         //declared arraylist here
 
 
@@ -124,9 +130,10 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
         String sub = ""; //strings initialized to null to be filled later
         String bod = "";
         String author = "";
+        String dateTime="";
 
 
-        int emailDate[] = {0,0,0};
+        int[] emailDate = {0,0,0};
         //Note for later.
         //p = service.users().getProfile("me").execute();
         //i = p.getHistoryId();
@@ -146,6 +153,36 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
 
             List<Message> testing = response.getMessages();
             for(Message test : testing){
+               Long longdate= test.getInternalDate();
+
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(longdate);
+
+//                System.out.println("DATE     " + dateFormat.format(calendar.getTime()));
+                String Date=dateFormat.format(calendar.getTime());
+
+                Date date = new Date(longdate);
+                DateFormat formatter = new SimpleDateFormat("HH:mm:ss:SSS");
+
+//                SimpleDateFormat dom = new SimpleDateFormat("EEE");
+                SimpleDateFormat dom = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+//                SimpleDateFormat date = new SimpleDateFormat("");
+
+
+                String fullTimeStamp = dom.format(date);
+
+                String Time = formatter.format(date);
+//                System.out.println("Time "+Time);
+
+                dateTime= fullTimeStamp;
+
+//                System.out.println("Timestamp" + dayOfWeek);
+
+                dateTimeList.add(dateTime);
+//                System.out.println("Date time list"+dateTimeList);
+
                 if(test.getPayload().getMimeType().contains("multipart")){
                     builder = new StringBuilder();
                     for(MessagePart part : test.getPayload().getParts()){
@@ -181,8 +218,13 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
 
                     mActivity.list(l);
                     break;
-                }else if(h.getName().equals("date")){
-                    emailDate = getDate(h.getValue());}
+                }else if(h.getName().equals("Date")){
+                    emailDate = getDate(h.getValue());
+//                    emailDate= new  String(Base64.decodeBase64(String.valueOf(emailDate)));
+//                    System.out.println("Date "+Base64.decodeBase64(String.valueOf(emailDate)));
+//                    System.out.println("Date normal "+emailDate);
+
+                }
                 else if(h.getName().equals("From")){
                     author = h.getValue();
 //                    System.out.println(author);
@@ -190,15 +232,6 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
                 }
             }
 
-//           for (MessagePartHeader f:messageHeader)
-//           {
-//               if (f.getName().equals("from"))
-//               {
-//                   author=f.getValue();
-//                   System.out.println(author);
-//                   fromList.add(author);
-//               }
-//           }
 
 //            for( MessagePartHeader h : messageHeader) {
 //                if(h.getName().equals("Subject")){
@@ -213,16 +246,19 @@ public class GetNameTask extends AsyncTask<Void, Void, Void> {
 //                    author = h.getValue();
 //                }
 //            }
-
-            db.addBook(new Email(sub,bod,author,emailDate[0],emailDate[1],emailDate[2],1));
-
+//                System.out.println("date sent to db"+dateTime);
+//            db.addBook(new Email(sub,bod,author,emailDate[0],emailDate[1],emailDate[2],1));
+                db.addBook(new Email(sub,bod,author,dateTime,1));
         }
 
         mActivity.list(l);
-        mActivity.setItemListener(body, subs,fromList); // date, from
+        mActivity.setItemListener(body, subs,fromList,dateTimeList); // date, from
+
         mActivity.hideSpinner();
 
     }
+
+
 
     public int[] getDate(String time){
         int day[] = {0,0,0};
